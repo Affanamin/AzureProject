@@ -1,0 +1,9 @@
+{
+	"name": "adf-stoverflow",
+	"location": "uaenorth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6740078a-5800-4484-9a46-a63f23e9ab8f",
+		"tenantId": "99ab3059-72a7-4603-804e-ab2116634426"
+	}
+}
