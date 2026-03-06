@@ -1,0 +1,12 @@
+{
+	"name": "AllTablesLookup",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServerOnPremLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
