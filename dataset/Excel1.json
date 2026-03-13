@@ -1,0 +1,29 @@
+{
+	"name": "Excel1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sheetIndex": {
+				"type": "int"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Earlwood_Air_Data_17_18_excel.xlsx",
+				"fileSystem": "excelblobcontainer"
+			},
+			"sheetIndex": {
+				"value": "@dataset().sheetIndex",
+				"type": "Expression"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
