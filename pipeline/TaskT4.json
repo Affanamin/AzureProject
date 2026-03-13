@@ -154,6 +154,22 @@
 					],
 					"timeout": "0.12:00:00"
 				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Until1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
 			}
 		],
 		"variables": {
@@ -162,7 +178,8 @@
 				"defaultValue": "0"
 			},
 			"isError": {
-				"type": "Boolean"
+				"type": "Boolean",
+				"defaultValue": false
 			},
 			"tempCounter": {
 				"type": "String"
