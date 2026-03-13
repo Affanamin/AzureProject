@@ -15,7 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Earlwood_Air_Data_17_18.xls",
+				"fileName": "Earlwood_Air_Data_17_18_excel.xlsx",
 				"fileSystem": "excelblobcontainer"
 			},
 			"sheetIndex": {
