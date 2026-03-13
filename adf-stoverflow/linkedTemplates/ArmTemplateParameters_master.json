@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-stoverflow"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorageLS_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorageLS_properties_typeProperties_url": {
+			"value": "https://ststoverflow001.dfs.core.windows.net/"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "0305-114828-egrdk6ek"
+		},
+		"AzureKeyVault01_properties_typeProperties_baseUrl": {
+			"value": "https://kvstckproj.vault.azure.net/"
+		},
+		"SqlServerOnPremLS_properties_typeProperties_server": {
+			"value": "localhost\\MSSQLSERVER2022"
+		},
+		"SqlServerOnPremLS_properties_typeProperties_database": {
+			"value": "StackOverflow2010"
+		},
+		"SqlServerOnPremLS_properties_typeProperties_userName": {
+			"value": "localadmin"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
