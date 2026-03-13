@@ -1,0 +1,224 @@
+{
+	"name": "Handle Error Rows",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get MetadataForExcel Files",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get MetadataForExcel Files",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get MetadataForExcel Files').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Until1",
+							"type": "Until",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@variables('isError')",
+									"type": "Expression"
+								},
+								"activities": [
+									{
+										"name": "Copy data1",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Set TempCounter",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ExcelSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												}
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings",
+													"copyBehavior": "MergeFiles"
+												},
+												"formatSettings": {
+													"type": "ParquetWriteSettings"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "Excel1",
+												"type": "DatasetReference",
+												"parameters": {
+													"sheetIndex": {
+														"value": "@int(variables('counter'))",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "OutputFolderFile",
+												"type": "DatasetReference",
+												"parameters": {
+													"fileName": {
+														"value": "@concat('demoExcelSheet_',variables('counter'),'.parquet')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Set TempCounter",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "tempCounter",
+											"value": {
+												"value": "@string(add(int(variables('counter')),1))",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Set Counter Value",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Copy data1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "counter",
+											"value": {
+												"value": "@variables('tempCounter')",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Set IsError",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Copy data1",
+												"dependencyConditions": [
+													"Failed"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "isError",
+											"value": {
+												"value": "@bool(1)",
+												"type": "Expression"
+											}
+										}
+									}
+								],
+								"timeout": "0.12:00:00"
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"counter": {
+				"type": "String",
+				"defaultValue": "0"
+			},
+			"isError": {
+				"type": "Boolean",
+				"defaultValue": false
+			},
+			"tempCounter": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
